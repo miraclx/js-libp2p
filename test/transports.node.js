@@ -661,7 +661,9 @@ describe('transports', () => {
             node.start(cb)
           })
         }
-      ], done)
+      ], (err) => {
+        done(err)
+      })
     })
 
     after((done) => {

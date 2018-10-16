@@ -8,6 +8,11 @@ const PeerId = require('peer-id')
 const waterfall = require('async/waterfall')
 const Node = require('./bundle-nodejs')
 
+let generated = 0
+function keyType () {
+  return ++generated % 2 === 0 ? 'rsa' : 'ed25519'
+}
+
 function createNode (multiaddrs, options, callback) {
   if (typeof options === 'function') {
     callback = options
@@ -32,7 +37,7 @@ function createNode (multiaddrs, options, callback) {
 
 function createPeerInfo (callback) {
   waterfall([
-    (cb) => PeerId.create({ bits: 512 }, cb),
+    (cb) => PeerId.create({ type: keyType(), bits: 512 }, cb),
     (peerId, cb) => PeerInfo.create(peerId, cb)
   ], callback)
 }
